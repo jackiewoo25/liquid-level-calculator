@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f7f4" />
+    <title>液位換算表</title>
+    <style>
+:root {
+  --bg: #f4f7f4;
+  --ink: #14211d;
+  --muted: #68746e;
+  --line: #b9c6bf;
+  --grid: #d8e0dc;
+  --blue: #164579;
+  --blue-2: #dcecff;
+  --pink: #ffd9dc;
+  --green: #0a6548;
+  --green-soft: #eaf5ee;
+  --key: #ffffff;
+  --key-alt: #eef4f0;
+  --keypad-h: 194px;
+  font-family: "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(10, 101, 72, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(10, 101, 72, 0.04) 1px, transparent 1px),
+    var(--bg);
+  background-size: 20px 20px;
+}
+
+button {
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+.sheet-app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100vw;
+  height: calc(100dvh - var(--keypad-h));
+  min-height: 330px;
+  padding: max(6px, env(safe-area-inset-top)) 5px 5px;
+}
+
+.sheet-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 0 5px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sheet-topbar p,
+.sheet-topbar h1 {
+  margin: 0;
+}
+
+.sheet-topbar p {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.sheet-topbar h1 {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.small-action {
+  min-width: 58px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.small-action.danger {
+  color: #b42318;
+}
+
+.small-action:disabled {
+  opacity: 0.42;
+}
+
+.table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(20, 33, 29, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(20, 33, 29, 0.04) 1px, transparent 1px),
+    #f7faf8;
+  background-size: 22px 22px;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1fr 1.18fr 1.18fr 0.95fr 1.12fr;
+  width: 100%;
+  min-width: 0;
+}
+
+.cell {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+  background: #fff;
+  font-size: clamp(14px, 3.7vw, 17px);
+  font-weight: 850;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.header {
+  min-height: 40px;
+  padding: 4px 2px;
+  background: var(--blue);
+  color: #fff;
+  font-size: clamp(11px, 3.05vw, 14px);
+  font-weight: 950;
+}
+
+.tank {
+  justify-content: flex-start;
+  padding-left: 5px;
+  background: var(--blue-2);
+  color: var(--blue);
+  font-size: clamp(16px, 4.45vw, 20px);
+  font-weight: 950;
+}
+
+.editable {
+  width: 100%;
+  height: 100%;
+  padding: 0 4px;
+  background: #fff;
+}
+
+.editable[data-field="factor"] {
+  background: var(--pink);
+}
+
+.editable.active {
+  position: relative;
+  outline: 3px solid var(--green);
+  outline-offset: -3px;
+  z-index: 1;
+}
+
+.readonly {
+  background: #fbfcfb;
+}
+
+.kg,
+.total-kg {
+  font-weight: 950;
+}
+
+.total-label {
+  justify-content: flex-end;
+  padding-right: 10px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 15px;
+}
+
+.total-cm,
+.total-kg {
+  min-height: 48px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 18px;
+}
+
+.summary-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  padding-top: 5px;
+}
+
+.summary-card {
+  display: grid;
+  min-height: 64px;
+  align-content: center;
+  justify-items: center;
+  border: 1px solid #cbd8d1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.summary-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.summary-card strong {
+  margin-top: 2px;
+  font-size: clamp(22px, 7vw, 30px);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.summary-card small {
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.editable-summary {
+  background: #fff9df;
+}
+
+.editable-summary.active {
+  outline: 3px solid var(--green);
+  outline-offset: -3px;
+}
+
+.remaining {
+  background: #fff7f0;
+  color: #a54616;
+}
+
+.remaining.done {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.remaining.over {
+  background: #ffe6e6;
+  color: #b42318;
+}
+
+.keypad {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--keypad-h);
+  padding: 5px 5px max(5px, env(safe-area-inset-bottom));
+  border-top: 1px solid #cbd5cf;
+  background: #dfe6e2;
+}
+
+.active-cell {
+  height: 22px;
+  padding: 2px 6px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  height: calc(100% - 24px);
+}
+
+.key {
+  min-height: 34px;
+  border: 1px solid #c6d0ca;
+  border-radius: 7px;
+  background: var(--key);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.wide-key {
+  background: var(--key-alt);
+  color: var(--green);
+  font-size: 14px;
+}
+
+@media (max-width: 374px) {
+  .sheet-app {
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+
+  .calc-grid {
+    grid-template-columns: 0.92fr 0.95fr 1.16fr 1.16fr 0.9fr 1.08fr;
+  }
+
+  .cell {
+    min-height: 45px;
+    font-size: 13px;
+  }
+
+  .header {
+    font-size: 10px;
+  }
+
+  .tank {
+    font-size: 16px;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <main class="sheet-app">
+      <header class="sheet-topbar">
+        <div>
+          <p>聯華交通</p>
+          <h1>液位換算表</h1>
+        </div>
+        <div class="top-actions">
+          <button class="small-action" id="undoAction" type="button">復原</button>
+          <button class="small-action danger" id="resetAll" type="button">清空</button>
+        </div>
+      </header>
+
+      <section class="table-wrap" aria-label="液位換算表">
+        <div class="calc-grid" id="calcGrid"></div>
+      </section>
+
+      <section class="summary-panel" id="summaryPanel" aria-label="總淨重與剩餘"></section>
+    </main>
+
+    <section class="keypad" aria-label="數字鍵盤">
+      <div class="active-cell" id="activeCellLabel">點選表格儲存格</div>
+      <div class="keypad-grid" id="keypadGrid"></div>
+    </section>
+
+        <script>
+const STORAGE_KEY = "lienwhaLiquidLevelSpreadsheet.v2";
+const UNDO_KEY = "lienwhaLiquidLevelSpreadsheet.undo.v2";
+const MAX_UNDO = 20;
+
+const defaultRows = [
+  { id: "n2o", tank: "N2O", factor: "36", current: "220", target: "350" },
+  { id: "t959", tank: "959", factor: "31", current: "0", target: "0" },
+  { id: "co2", tank: "CO2", factor: "33", current: "", target: "" },
+  { id: "t481", tank: "481", factor: "25", current: "", target: "0" },
+  { id: "t338", tank: "338", factor: "21", current: "", target: "0" },
+  { id: "high-n2", tank: "高氮", factor: "37.5", current: "", target: "0" }
+];
+
+const editableFields = ["factor", "current", "target"];
+const fieldLabels = {
+  factor: "1cm=kg",
+  current: "目前液位",
+  target: "灌後液位"
+};
+
+let state = loadState();
+let undoStack = loadUndoStack();
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || !Array.isArray(saved.rows)) throw new Error("empty");
+    return {
+      netWeight: cleanNumber(saved.netWeight),
+      rows: mergeRows(saved.rows),
+      active: saved.active || { rowId: "n2o", field: "current" }
+    };
+  } catch {
+    return {
+      netWeight: "",
+      rows: clone(defaultRows),
+      active: { rowId: "n2o", field: "current" }
+    };
+  }
+}
+
+function mergeRows(savedRows) {
+  return defaultRows.map((row) => {
+    const saved = savedRows.find((item) => item.id === row.id);
+    return saved ? { ...row, ...pickEditable(saved) } : row;
+  });
+}
+
+function pickEditable(row) {
+  return {
+    factor: cleanNumber(row.factor),
+    current: cleanNumber(row.current),
+    target: cleanNumber(row.target)
+  };
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadUndoStack() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(UNDO_KEY));
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveUndoStack() {
+  localStorage.setItem(UNDO_KEY, JSON.stringify(undoStack.slice(-MAX_UNDO)));
+}
+
+function snapshotState() {
+  return clone(state);
+}
+
+function pushUndo() {
+  undoStack.push(snapshotState());
+  undoStack = undoStack.slice(-MAX_UNDO);
+  saveUndoStack();
+}
+
+function restorePrevious() {
+  const previous = undoStack.pop();
+  if (!previous) return;
+  undoStack = undoStack.slice(-MAX_UNDO);
+  state = previous;
+  saveUndoStack();
+  saveState();
+  render();
+}
+
+function cleanNumber(value) {
+  const raw = String(value ?? "");
+  const cleaned = raw.replace(/[^\d.]/g, "");
+  const firstDot = cleaned.indexOf(".");
+  if (firstDot === -1) return cleaned;
+  return cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, "");
+}
+
+function numberValue(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function rowCalc(row) {
+  const cm = numberValue(row.target) - numberValue(row.current);
+  const kg = cm * numberValue(row.factor);
+  return {
+    cm: Number.isFinite(cm) ? cm : 0,
+    kg: Number.isFinite(kg) ? kg : 0
+  };
+}
+
+function formatNumber(value, digits = 1) {
+  const fixed = Number(value).toFixed(digits);
+  return fixed.replace(/\.0$/, "");
+}
+
+function totalKg() {
+  return state.rows.reduce((sum, row) => sum + rowCalc(row).kg, 0);
+}
+
+function remainingKg() {
+  return numberValue(state.netWeight) - totalKg();
+}
+
+function activeRow() {
+  return state.rows.find((row) => row.id === state.active.rowId) || state.rows[0];
+}
+
+function render() {
+  const grid = document.getElementById("calcGrid");
+  grid.innerHTML = `
+    <div class="cell header">桶槽</div>
+    <div class="cell header">1cm=kg</div>
+    <div class="cell header">目前液位</div>
+    <div class="cell header">灌後液位</div>
+    <div class="cell header">所打cm</div>
+    <div class="cell header">預估kg</div>
+    ${state.rows.map(renderRow).join("")}
+    <div class="cell total-label" style="grid-column: 1 / 5;">總重量</div>
+    <div class="cell total-cm">${formatNumber(totalCm())}</div>
+    <div class="cell total-kg">${formatNumber(totalKg(), 0)}</div>
+  `;
+  renderSummary();
+  renderKeypad();
+  renderActiveLabel();
+  renderUndoState();
+}
+
+function renderUndoState() {
+  const button = document.getElementById("undoAction");
+  button.disabled = undoStack.length === 0;
+}
+
+function renderSummary() {
+  const remaining = remainingKg();
+  const remainingClass = remaining < 0 ? "over" : remaining === 0 && state.netWeight !== "" ? "done" : "";
+  document.getElementById("summaryPanel").innerHTML = `
+    <button class="summary-card editable-summary ${state.active.field === "netWeight" ? "active" : ""}" data-summary-field="netWeight" type="button">
+      <span>總淨重</span>
+      <strong>${state.netWeight || "輸入"}</strong>
+      <small>kg</small>
+    </button>
+    <div class="summary-card">
+      <span>已充填</span>
+      <strong>${formatNumber(totalKg(), 0)}</strong>
+      <small>kg</small>
+    </div>
+    <div class="summary-card remaining ${remainingClass}">
+      <span>剩餘</span>
+      <strong>${state.netWeight === "" ? "-" : formatNumber(remaining, 0)}</strong>
+      <small>kg</small>
+    </div>
+  `;
+}
+
+function renderRow(row) {
+  const calc = rowCalc(row);
+  return `
+    <div class="cell tank">${row.tank}</div>
+    ${editableCell(row, "factor")}
+    ${editableCell(row, "current")}
+    ${editableCell(row, "target")}
+    <div class="cell readonly">${formatNumber(calc.cm)}</div>
+    <div class="cell readonly kg">${formatNumber(calc.kg, 0)}</div>
+  `;
+}
+
+function editableCell(row, field) {
+  const active = state.active.rowId === row.id && state.active.field === field;
+  const value = row[field];
+  return `
+    <button class="cell editable ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button">
+      ${value === "" ? "&nbsp;" : value}
+    </button>
+  `;
+}
+
+function totalCm() {
+  return state.rows.reduce((sum, row) => sum + rowCalc(row).cm, 0);
+}
+
+function renderKeypad() {
+  document.getElementById("keypadGrid").innerHTML = [
+    "7",
+    "8",
+    "9",
+    "back",
+    "4",
+    "5",
+    "6",
+    "clear",
+    "1",
+    "2",
+    "3",
+    "next",
+    "0",
+    "00",
+    ".",
+    "done"
+  ]
+    .map(renderKey)
+    .join("");
+}
+
+function renderKey(key) {
+  const labels = {
+    back: "⌫",
+    clear: "清除",
+    next: "下一格",
+    done: "完成"
+  };
+  return `<button class="key ${key.length > 1 ? "wide-key" : ""}" data-key="${key}" type="button">${labels[key] || key}</button>`;
+}
+
+function renderActiveLabel() {
+  if (state.active.field === "netWeight") {
+    document.getElementById("activeCellLabel").textContent = "總淨重";
+    return;
+  }
+  const row = activeRow();
+  const label = `${row.tank} / ${fieldLabels[state.active.field]}`;
+  document.getElementById("activeCellLabel").textContent = label;
+}
+
+function setActive(rowId, field) {
+  if (!editableFields.includes(field)) return;
+  state.active = { rowId, field };
+  saveState();
+  render();
+}
+
+function applyKey(key) {
+  if (state.active.field === "netWeight") {
+    if (key === "back") {
+      pushUndo();
+      state.netWeight = state.netWeight.slice(0, -1);
+    } else if (key === "clear") {
+      pushUndo();
+      state.netWeight = "";
+    } else if (key === "next" || key === "done") {
+      state.active = { rowId: "n2o", field: "current" };
+    } else {
+      pushUndo();
+      state.netWeight = cleanNumber(`${state.netWeight}${key}`);
+    }
+    saveState();
+    render();
+    return;
+  }
+
+  const row = activeRow();
+  const field = state.active.field;
+  if (!row || !editableFields.includes(field)) return;
+
+  if (key === "back") {
+    pushUndo();
+    row[field] = row[field].slice(0, -1);
+  } else if (key === "clear") {
+    pushUndo();
+    row[field] = "";
+  } else if (key === "next" || key === "done") {
+    moveNext();
+    saveState();
+    render();
+    return;
+  } else {
+    pushUndo();
+    row[field] = cleanNumber(`${row[field]}${key}`);
+  }
+
+  saveState();
+  render();
+}
+
+function moveNext() {
+  const rowIndex = state.rows.findIndex((row) => row.id === state.active.rowId);
+  const fieldIndex = editableFields.indexOf(state.active.field);
+  if (fieldIndex < editableFields.length - 1) {
+    state.active.field = editableFields[fieldIndex + 1];
+    return;
+  }
+  const nextRow = state.rows[(rowIndex + 1) % state.rows.length];
+  state.active = { rowId: nextRow.id, field: editableFields[0] };
+}
+
+function resetAll() {
+  pushUndo();
+  state = {
+    netWeight: "",
+    rows: clone(defaultRows).map((row) => ({ ...row, current: "", target: "" })),
+    active: { rowId: "n2o", field: "current" }
+  };
+  saveState();
+  render();
+}
+
+document.getElementById("calcGrid").addEventListener("click", (event) => {
+  const cell = event.target.closest("[data-row-id][data-field]");
+  if (!cell) return;
+  setActive(cell.dataset.rowId, cell.dataset.field);
+});
+
+document.getElementById("summaryPanel").addEventListener("click", (event) => {
+  const cell = event.target.closest("[data-summary-field]");
+  if (!cell) return;
+  state.active = { rowId: "", field: cell.dataset.summaryField };
+  saveState();
+  render();
+});
+
+document.getElementById("keypadGrid").addEventListener("click", (event) => {
+  const key = event.target.closest("[data-key]");
+  if (!key) return;
+  applyKey(key.dataset.key);
+});
+
+document.getElementById("resetAll").addEventListener("click", resetAll);
+document.getElementById("undoAction").addEventListener("click", restorePrevious);
+
+render();
+
+    </script>
+  </body>
+</html>

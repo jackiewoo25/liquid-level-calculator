@@ -1,0 +1,323 @@
+:root {
+  --bg: #f4f7f4;
+  --ink: #14211d;
+  --muted: #68746e;
+  --line: #b9c6bf;
+  --grid: #d8e0dc;
+  --blue: #164579;
+  --blue-2: #dcecff;
+  --pink: #ffd9dc;
+  --green: #0a6548;
+  --green-soft: #eaf5ee;
+  --key: #ffffff;
+  --key-alt: #eef4f0;
+  --keypad-h: 194px;
+  font-family: "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(10, 101, 72, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(10, 101, 72, 0.04) 1px, transparent 1px),
+    var(--bg);
+  background-size: 20px 20px;
+}
+
+button {
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+.sheet-app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100vw;
+  height: calc(100dvh - var(--keypad-h));
+  min-height: 330px;
+  padding: max(6px, env(safe-area-inset-top)) 5px 5px;
+}
+
+.sheet-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 0 5px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sheet-topbar p,
+.sheet-topbar h1 {
+  margin: 0;
+}
+
+.sheet-topbar p {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.sheet-topbar h1 {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.small-action {
+  min-width: 58px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.small-action.danger {
+  color: #b42318;
+}
+
+.small-action:disabled {
+  opacity: 0.42;
+}
+
+.table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(20, 33, 29, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(20, 33, 29, 0.04) 1px, transparent 1px),
+    #f7faf8;
+  background-size: 22px 22px;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1fr 1.18fr 1.18fr 0.95fr 1.12fr;
+  width: 100%;
+  min-width: 0;
+}
+
+.cell {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+  background: #fff;
+  font-size: clamp(14px, 3.7vw, 17px);
+  font-weight: 850;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.header {
+  min-height: 40px;
+  padding: 4px 2px;
+  background: var(--blue);
+  color: #fff;
+  font-size: clamp(11px, 3.05vw, 14px);
+  font-weight: 950;
+}
+
+.tank {
+  justify-content: flex-start;
+  padding-left: 5px;
+  background: var(--blue-2);
+  color: var(--blue);
+  font-size: clamp(16px, 4.45vw, 20px);
+  font-weight: 950;
+}
+
+.editable {
+  width: 100%;
+  height: 100%;
+  padding: 0 4px;
+  background: #fff;
+}
+
+.editable[data-field="factor"] {
+  background: var(--pink);
+}
+
+.editable.active {
+  position: relative;
+  outline: 3px solid var(--green);
+  outline-offset: -3px;
+  z-index: 1;
+}
+
+.readonly {
+  background: #fbfcfb;
+}
+
+.kg,
+.total-kg {
+  font-weight: 950;
+}
+
+.total-label {
+  justify-content: flex-end;
+  padding-right: 10px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 15px;
+}
+
+.total-cm,
+.total-kg {
+  min-height: 48px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 18px;
+}
+
+.summary-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  padding-top: 5px;
+}
+
+.summary-card {
+  display: grid;
+  min-height: 64px;
+  align-content: center;
+  justify-items: center;
+  border: 1px solid #cbd8d1;
+  border-radius: 7px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.summary-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.summary-card strong {
+  margin-top: 2px;
+  font-size: clamp(22px, 7vw, 30px);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.summary-card small {
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.editable-summary {
+  background: #fff9df;
+}
+
+.editable-summary.active {
+  outline: 3px solid var(--green);
+  outline-offset: -3px;
+}
+
+.remaining {
+  background: #fff7f0;
+  color: #a54616;
+}
+
+.remaining.done {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.remaining.over {
+  background: #ffe6e6;
+  color: #b42318;
+}
+
+.keypad {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--keypad-h);
+  padding: 5px 5px max(5px, env(safe-area-inset-bottom));
+  border-top: 1px solid #cbd5cf;
+  background: #dfe6e2;
+}
+
+.active-cell {
+  height: 22px;
+  padding: 2px 6px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  height: calc(100% - 24px);
+}
+
+.key {
+  min-height: 34px;
+  border: 1px solid #c6d0ca;
+  border-radius: 7px;
+  background: var(--key);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.wide-key {
+  background: var(--key-alt);
+  color: var(--green);
+  font-size: 14px;
+}
+
+@media (max-width: 374px) {
+  .sheet-app {
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+
+  .calc-grid {
+    grid-template-columns: 0.92fr 0.95fr 1.16fr 1.16fr 0.9fr 1.08fr;
+  }
+
+  .cell {
+    min-height: 45px;
+    font-size: 13px;
+  }
+
+  .header {
+    font-size: 10px;
+  }
+
+  .tank {
+    font-size: 16px;
+  }
+}
