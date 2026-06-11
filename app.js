@@ -149,16 +149,12 @@ function activeRow() {
 function render() {
   const grid = document.getElementById("calcGrid");
   grid.innerHTML = `
-    <div class="cell header">桶槽</div>
-    <div class="cell header">1cm=kg</div>
-    <div class="cell header">目前液位</div>
-    <div class="cell header">灌後液位</div>
-    <div class="cell header">所打cm</div>
-    <div class="cell header">預估kg</div>
     ${state.rows.map(renderRow).join("")}
-    <div class="cell total-label" style="grid-column: 1 / 5;">總重量</div>
-    <div class="cell total-cm">${formatNumber(totalCm())}</div>
-    <div class="cell total-kg">${formatNumber(totalKg(), 0)}</div>
+    <div class="total-strip">
+      <span>合計</span>
+      <strong>${formatNumber(totalCm())} cm</strong>
+      <strong>${formatNumber(totalKg(), 0)} kg</strong>
+    </div>
   `;
   renderSummary();
   renderKeypad();
@@ -196,13 +192,28 @@ function renderSummary() {
 
 function renderRow(row) {
   const calc = rowCalc(row);
+  const active = state.active.rowId === row.id;
   return `
-    <div class="cell tank">${row.tank}</div>
-    ${editableCell(row, "factor")}
-    ${editableCell(row, "current")}
-    ${editableCell(row, "target")}
-    <div class="cell readonly">${formatNumber(calc.cm)}</div>
-    <div class="cell readonly kg">${formatNumber(calc.kg, 0)}</div>
+    <article class="tank-card ${active ? "active-card" : ""}">
+      <div class="tank-head">
+        <div class="tank-name">${row.tank}</div>
+        ${editableCell(row, "factor")}
+      </div>
+      <div class="input-row">
+        ${editableCell(row, "current")}
+        ${editableCell(row, "target")}
+      </div>
+      <div class="result-row">
+        <div class="result-chip">
+          <span>所打 cm</span>
+          <strong>${formatNumber(calc.cm)}</strong>
+        </div>
+        <div class="result-chip kg">
+          <span>預估 kg</span>
+          <strong>${formatNumber(calc.kg, 0)}</strong>
+        </div>
+      </div>
+    </article>
   `;
 }
 
@@ -210,9 +221,11 @@ function editableCell(row, field) {
   const active = state.active.rowId === row.id && state.active.field === field;
   const value = row[field];
   const locked = field === "factor" && state.factorLocked;
+  const placeholder = field === "factor" ? "-" : "輸入";
   return `
-    <button class="cell editable ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
-      <span>${value === "" ? "&nbsp;" : value}</span>
+    <button class="editable field-${field} ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
+      <small>${fieldLabels[field]}</small>
+      <span>${value === "" ? placeholder : value}</span>
     </button>
   `;
 }
