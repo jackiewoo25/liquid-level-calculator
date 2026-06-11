@@ -26,6 +26,7 @@ const compactFieldLabels = {
 
 let state = loadState();
 let undoStack = loadUndoStack();
+let replaceOnNextInput = true;
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -279,8 +280,15 @@ function setActive(rowId, field) {
     return;
   }
   state.active = { rowId, field };
+  replaceOnNextInput = true;
   saveState();
   render();
+}
+
+function firstInputValue(key) {
+  if (key === ".") return "0.";
+  if (key === "00") return "0";
+  return key;
 }
 
 function applyKey(key) {
@@ -288,14 +296,18 @@ function applyKey(key) {
     if (key === "back") {
       pushUndo();
       state.netWeight = state.netWeight.slice(0, -1);
+      replaceOnNextInput = false;
     } else if (key === "clear") {
       pushUndo();
       state.netWeight = "";
+      replaceOnNextInput = false;
     } else if (key === "next" || key === "done") {
       state.active = { rowId: "n2o", field: "current" };
+      replaceOnNextInput = true;
     } else {
       pushUndo();
-      state.netWeight = cleanNumber(`${state.netWeight}${key}`);
+      state.netWeight = replaceOnNextInput ? firstInputValue(key) : cleanNumber(`${state.netWeight}${key}`);
+      replaceOnNextInput = false;
     }
     saveState();
     render();
@@ -309,17 +321,21 @@ function applyKey(key) {
   if (key === "back") {
     pushUndo();
     row[field] = row[field].slice(0, -1);
+    replaceOnNextInput = false;
   } else if (key === "clear") {
     pushUndo();
     row[field] = "";
+    replaceOnNextInput = false;
   } else if (key === "next" || key === "done") {
     moveNext();
+    replaceOnNextInput = true;
     saveState();
     render();
     return;
   } else {
     pushUndo();
-    row[field] = cleanNumber(`${row[field]}${key}`);
+    row[field] = replaceOnNextInput ? firstInputValue(key) : cleanNumber(`${row[field]}${key}`);
+    replaceOnNextInput = false;
   }
 
   saveState();
@@ -389,6 +405,7 @@ document.getElementById("summaryPanel").addEventListener("click", (event) => {
   const cell = event.target.closest("[data-summary-field]");
   if (!cell) return;
   state.active = { rowId: "", field: cell.dataset.summaryField };
+  replaceOnNextInput = true;
   saveState();
   render();
 });
