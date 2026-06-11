@@ -1,7 +1,7 @@
 :root {
   --app-w: 430px;
-  --keypad-h: 162px;
-  --bg: #eef3ef;
+  --keypad-h: 186px;
+  --bg: #f3f7f4;
   --ink: #13201b;
   --muted: #66756e;
   --line: #d5e0da;
@@ -30,8 +30,8 @@ body {
   overflow: hidden;
   color: var(--ink);
   background:
-    radial-gradient(circle at 18% 8%, rgba(8, 98, 71, 0.13), transparent 28%),
-    radial-gradient(circle at 88% 0%, rgba(23, 73, 120, 0.1), transparent 30%),
+    radial-gradient(circle at 18% 8%, rgba(8, 98, 71, 0.08), transparent 28%),
+    radial-gradient(circle at 88% 0%, rgba(23, 73, 120, 0.06), transparent 30%),
     linear-gradient(180deg, #f9fbf9 0%, var(--bg) 100%);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -62,7 +62,7 @@ button {
   width: min(100vw, var(--app-w));
   height: calc(100dvh - var(--keypad-h));
   min-height: 384px;
-  padding: max(6px, env(safe-area-inset-top)) 8px 6px;
+  padding: max(6px, env(safe-area-inset-top)) 8px 5px;
 }
 
 .sheet-topbar {
@@ -70,7 +70,7 @@ button {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
+  min-height: 36px;
 }
 
 .sheet-topbar p,
@@ -85,7 +85,7 @@ button {
 }
 
 .sheet-topbar h1 {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 950;
   line-height: 1;
 }
@@ -131,7 +131,7 @@ button {
 
 .summary-card {
   display: grid;
-  min-height: 52px;
+  min-height: 48px;
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
@@ -149,7 +149,7 @@ button {
 
 .summary-card strong {
   margin-top: 2px;
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 950;
   line-height: 0.98;
 }
@@ -199,23 +199,23 @@ button {
 
 .calc-grid {
   display: grid;
-  gap: 5px;
+  gap: 4px;
 }
 
 .tank-card {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) 102px;
+  grid-template-columns: 58px minmax(0, 1fr) 100px;
   grid-template-areas: "head inputs results";
   align-items: stretch;
   gap: 6px;
-  min-height: 52px;
-  border: 1px solid rgba(19, 32, 27, 0.09);
-  border-radius: 15px;
+  min-height: 50px;
+  border: 1px solid rgba(19, 32, 27, 0.07);
+  border-radius: 13px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 248, 0.96)),
     var(--surface);
-  box-shadow: 0 8px 20px rgba(31, 48, 42, 0.08);
-  padding: 5px;
+  box-shadow: 0 6px 16px rgba(31, 48, 42, 0.06);
+  padding: 4px;
 }
 
 .tank-card.active-card {
@@ -228,32 +228,34 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
+  justify-items: center;
   gap: 2px;
   margin-bottom: 0;
 }
 
 .tank-name {
   color: var(--blue);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 950;
   line-height: 1;
+  text-align: center;
 }
 
 .editable {
   display: grid;
   align-content: center;
   min-width: 0;
-  min-height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
+  min-height: 36px;
+  border: 1px solid rgba(19, 32, 27, 0.1);
+  border-radius: 10px;
   background: var(--surface);
   padding: 5px 6px;
   text-align: center;
 }
 
 .editable small {
-  color: var(--muted);
-  font-size: 9px;
+  color: rgba(102, 117, 110, 0.58);
+  font-size: 10px;
   font-weight: 950;
   line-height: 1;
 }
@@ -261,7 +263,7 @@ button {
 .editable span {
   margin-top: 3px;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 950;
   line-height: 1;
 }
@@ -273,7 +275,7 @@ button {
 
 .field-factor {
   min-width: 0;
-  min-height: 20px;
+  min-height: 19px;
   border-color: rgba(23, 73, 120, 0.16);
   background: var(--blue-2);
   padding: 3px 4px;
@@ -307,7 +309,7 @@ button {
   grid-area: inputs;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 5px;
 }
 
 .result-row {
@@ -324,20 +326,21 @@ button {
   min-height: 0;
   align-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 9px;
   background: var(--green-2);
   color: var(--green);
   padding: 3px 6px;
 }
 
 .result-chip span {
-  font-size: 9px;
+  color: rgba(8, 98, 71, 0.58);
+  font-size: 10px;
   font-weight: 950;
 }
 
 .result-chip strong {
   margin-top: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 950;
   line-height: 1;
 }
@@ -347,12 +350,16 @@ button {
   color: var(--blue);
 }
 
+.result-chip.kg span {
+  color: rgba(23, 73, 120, 0.58);
+}
+
 .total-strip {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 12px;
   align-items: center;
-  min-height: 36px;
+  min-height: 33px;
   border-radius: 13px;
   background: #0f5f49;
   color: #fff;
@@ -481,7 +488,7 @@ button {
   width: min(100vw, var(--app-w));
   height: var(--keypad-h);
   transform: translateX(50%);
-  padding: 5px 8px max(5px, env(safe-area-inset-bottom));
+  padding: 7px 8px max(7px, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(19, 32, 27, 0.1);
   background: rgba(224, 233, 228, 0.96);
   box-shadow: 0 -14px 34px rgba(31, 48, 42, 0.12);
@@ -489,7 +496,7 @@ button {
 }
 
 .active-cell {
-  height: 21px;
+  height: 24px;
   color: var(--green);
   font-size: 12px;
   font-weight: 950;
@@ -499,17 +506,17 @@ button {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  height: calc(100% - 22px);
+  height: calc(100% - 25px);
 }
 
 .key {
-  min-height: 28px;
-  border: 1px solid rgba(19, 32, 27, 0.12);
-  border-radius: 11px;
+  min-height: 34px;
+  border: 1px solid rgba(19, 32, 27, 0.13);
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 2px 0 rgba(31, 48, 42, 0.1);
   color: var(--ink);
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 950;
 }
 

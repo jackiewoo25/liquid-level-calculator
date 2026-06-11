@@ -20,8 +20,8 @@ const fieldLabels = {
 };
 const compactFieldLabels = {
   factor: "kg/cm",
-  current: "目前",
-  target: "灌後"
+  current: "前",
+  target: "後"
 };
 
 let state = loadState();
@@ -226,7 +226,7 @@ function editableCell(row, field) {
   const active = state.active.rowId === row.id && state.active.field === field;
   const value = row[field];
   const locked = field === "factor" && state.factorLocked;
-  const placeholder = field === "factor" ? "-" : "輸入";
+  const placeholder = field === "factor" ? "-" : "&nbsp;";
   return `
     <button class="editable field-${field} ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
       <small>${compactFieldLabels[field]}</small>
