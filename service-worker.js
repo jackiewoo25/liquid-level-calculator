@@ -1,5 +1,5 @@
-const CACHE_NAME = "lienwha-liquid-level-calculator-v7";
-const ASSETS = ["./", "./index.html", "./styles.css?v=7", "./app.js?v=7", "./manifest.webmanifest?v=7"];
+const CACHE_NAME = "lienwha-liquid-level-calculator-v9";
+const ASSETS = ["./", "./index.html", "./styles.css?v=9", "./app.js?v=9", "./manifest.webmanifest?v=9"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));

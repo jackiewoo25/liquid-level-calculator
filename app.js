@@ -18,6 +18,11 @@ const fieldLabels = {
   current: "目前液位",
   target: "灌後液位"
 };
+const compactFieldLabels = {
+  factor: "kg/cm",
+  current: "目前",
+  target: "灌後"
+};
 
 let state = loadState();
 let undoStack = loadUndoStack();
@@ -204,12 +209,12 @@ function renderRow(row) {
         ${editableCell(row, "target")}
       </div>
       <div class="result-row">
-        <div class="result-chip">
-          <span>所打 cm</span>
+        <div class="result-chip cm">
+          <span>cm</span>
           <strong>${formatNumber(calc.cm)}</strong>
         </div>
         <div class="result-chip kg">
-          <span>預估 kg</span>
+          <span>kg</span>
           <strong>${formatNumber(calc.kg, 0)}</strong>
         </div>
       </div>
@@ -224,7 +229,7 @@ function editableCell(row, field) {
   const placeholder = field === "factor" ? "-" : "輸入";
   return `
     <button class="editable field-${field} ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
-      <small>${fieldLabels[field]}</small>
+      <small>${compactFieldLabels[field]}</small>
       <span>${value === "" ? placeholder : value}</span>
     </button>
   `;
