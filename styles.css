@@ -64,7 +64,7 @@ button {
   height: auto;
   max-height: calc(var(--viewport-h) - 190px);
   min-height: 0;
-  padding: max(6px, env(safe-area-inset-top)) 8px 5px;
+  padding: max(4px, env(safe-area-inset-top)) 8px 3px;
 }
 
 .sheet-topbar {
@@ -72,7 +72,7 @@ button {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  min-height: 36px;
+  min-height: 31px;
 }
 
 .sheet-topbar p,
@@ -82,12 +82,12 @@ button {
 
 .sheet-topbar p {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
 }
 
 .sheet-topbar h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 950;
   line-height: 1;
 }
@@ -98,10 +98,10 @@ button {
 }
 
 .small-action {
-  min-width: 46px;
-  height: 30px;
-  border: 1px solid rgba(8, 98, 71, 0.2);
-  border-radius: 11px;
+  min-width: 42px;
+  height: 28px;
+  border: 1px solid rgba(8, 98, 71, 0.18);
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 6px 16px rgba(31, 48, 42, 0.08);
   color: var(--green);
@@ -127,17 +127,17 @@ button {
   order: 2;
   display: grid;
   grid-template-columns: 1.05fr 1fr 1fr;
-  gap: 6px;
-  padding: 3px 0 6px;
+  gap: 5px;
+  padding: 2px 0 4px;
 }
 
 .summary-card {
   display: grid;
-  min-height: 56px;
+  min-height: 44px;
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
-  border-radius: 13px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 24px rgba(31, 48, 42, 0.08);
   color: var(--ink);
@@ -145,14 +145,14 @@ button {
 
 .summary-card span {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 950;
   line-height: 1;
 }
 
 .summary-card strong {
-  margin-top: 5px;
-  font-size: 22px;
+  margin-top: 3px;
+  font-size: 19px;
   font-weight: 950;
   line-height: 0.98;
 }
@@ -195,7 +195,7 @@ button {
 
 .calc-grid {
   display: grid;
-  gap: 4px;
+  gap: 3px;
 }
 
 .tank-card {
@@ -203,15 +203,15 @@ button {
   grid-template-columns: 58px minmax(0, 1fr);
   grid-template-areas: "head inputs";
   align-items: stretch;
-  gap: 5px;
-  min-height: 50px;
+  gap: 4px;
+  min-height: 51px;
   border: 1px solid rgba(19, 32, 27, 0.07);
-  border-radius: 13px;
+  border-radius: 11px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 248, 0.96)),
     var(--surface);
   box-shadow: 0 6px 16px rgba(31, 48, 42, 0.06);
-  padding: 4px;
+  padding: 3px;
 }
 
 .tank-card.active-card {
@@ -231,7 +231,7 @@ button {
 
 .tank-name {
   color: var(--blue);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 950;
   line-height: 1;
   text-align: center;
@@ -243,9 +243,9 @@ button {
   align-content: center;
   justify-items: center;
   min-width: 0;
-  min-height: 36px;
+  min-height: 40px;
   border: 1px solid rgba(19, 32, 27, 0.1);
-  border-radius: 10px;
+  border-radius: 9px;
   background: var(--surface);
   padding: 5px 6px;
   text-align: center;
@@ -316,11 +316,11 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   min-width: 0;
-  min-height: 36px;
+  min-height: 40px;
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(19, 32, 27, 0.1);
-  border-radius: 10px;
+  border-radius: 9px;
   background: #eef7f2;
   color: var(--green);
   padding: 5px 4px;
@@ -504,7 +504,7 @@ button {
   }
 
   .summary-card span {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .tank-name {
@@ -523,12 +523,12 @@ button {
 
   .tank-card {
     grid-template-columns: 50px minmax(0, 1fr);
-    gap: 4px;
-    padding: 6px;
+    gap: 3px;
+    padding: 3px;
   }
 
   .editable {
-    min-height: 41px;
+    min-height: 40px;
     padding-right: 4px;
     padding-left: 4px;
   }
@@ -564,7 +564,7 @@ button {
     width: min(100vw, 430px);
     height: auto;
     max-height: calc(var(--viewport-h) - 190px);
-    padding-top: max(28px, env(safe-area-inset-top));
+    padding-top: max(24px, env(safe-area-inset-top));
   }
 
   .keypad {
@@ -572,11 +572,11 @@ button {
   }
 
   .summary-card {
-    min-height: 50px;
+    min-height: 40px;
   }
 
   .summary-card strong {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .tank-card {
