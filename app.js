@@ -245,19 +245,15 @@ function renderKeypad() {
     "7",
     "8",
     "9",
-    "back",
     "4",
     "5",
     "6",
-    "clear",
     "1",
     "2",
     "3",
-    "next",
-    "0",
-    "00",
     ".",
-    "done"
+    "0",
+    "back"
   ]
     .map(renderKey)
     .join("");
@@ -265,12 +261,10 @@ function renderKeypad() {
 
 function renderKey(key) {
   const labels = {
-    back: "⌫",
-    clear: "清除",
-    next: "下一格",
-    done: "完成"
+    back: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4H8l-6 8 6 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z" /><path d="m12 9 6 6" /><path d="m18 9-6 6" /></svg>`
   };
-  return `<button class="key ${key.length > 1 ? "wide-key" : ""}" data-key="${key}" type="button">${labels[key] || key}</button>`;
+  const className = key === "back" ? "key icon-key" : "key";
+  return `<button class="${className}" data-key="${key}" type="button" aria-label="${key === "back" ? "刪除" : key}">${labels[key] || key}</button>`;
 }
 
 function setActive(rowId, field) {
@@ -287,7 +281,6 @@ function setActive(rowId, field) {
 
 function firstInputValue(key) {
   if (key === ".") return "0.";
-  if (key === "00") return "0";
   return key;
 }
 

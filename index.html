@@ -7,21 +7,36 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
     />
     <meta name="theme-color" content="#f4f7f4" />
-    <title>液位換算表</title>
-    <link rel="manifest" href="manifest.webmanifest?v=22" />
-    <link rel="stylesheet" href="styles.css?v=22" />
+    <title>聯華交通_液位換算</title>
+    <link rel="manifest" href="manifest.webmanifest?v=23" />
+    <link rel="stylesheet" href="styles.css?v=23" />
   </head>
   <body>
     <main class="sheet-app">
       <header class="sheet-topbar">
-        <div>
-          <p>聯華交通</p>
-          <h1>液位換算表</h1>
-        </div>
+        <h1>聯華交通_液位換算</h1>
         <div class="top-actions">
-          <button class="small-action" id="undoAction" type="button">復原</button>
-          <button class="small-action" id="settingsAction" type="button">設定</button>
-          <button class="small-action danger" id="resetAll" type="button">清空</button>
+          <button class="small-action" id="undoAction" type="button" aria-label="復原" title="復原">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 14 4 9l5-5" />
+              <path d="M4 9h10a6 6 0 1 1 0 12h-3" />
+            </svg>
+          </button>
+          <button class="small-action" id="settingsAction" type="button" aria-label="設定" title="設定">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+              <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 1 1 4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1A2 2 0 1 1 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 1 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.1a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1Z" />
+            </svg>
+          </button>
+          <button class="small-action danger" id="resetAll" type="button" aria-label="清空" title="清空">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18" />
+              <path d="M8 6V4h8v2" />
+              <path d="M6 6l1 15h10l1-15" />
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -56,7 +71,7 @@
       <div class="keypad-grid" id="keypadGrid"></div>
     </section>
 
-    <script src="app.js?v=22"></script>
+    <script src="app.js?v=23"></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.getRegistrations().then((registrations) => {
