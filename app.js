@@ -169,7 +169,6 @@ function render() {
   `;
   renderSummary();
   renderKeypad();
-  renderActiveLabel();
   renderUndoState();
 }
 
@@ -270,16 +269,6 @@ function renderKey(key) {
     done: "完成"
   };
   return `<button class="key ${key.length > 1 ? "wide-key" : ""}" data-key="${key}" type="button">${labels[key] || key}</button>`;
-}
-
-function renderActiveLabel() {
-  if (state.active.field === "netWeight") {
-    document.getElementById("activeCellLabel").textContent = "總淨重";
-    return;
-  }
-  const row = activeRow();
-  const label = `${row.tank} / ${fieldLabels[state.active.field]}`;
-  document.getElementById("activeCellLabel").textContent = label;
 }
 
 function setActive(rowId, field) {

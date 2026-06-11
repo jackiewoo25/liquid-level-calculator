@@ -1,6 +1,6 @@
 :root {
   --app-w: 430px;
-  --keypad-h: 232px;
+  --keypad-h: 246px;
   --bg: #f3f7f4;
   --ink: #13201b;
   --muted: #66756e;
@@ -464,25 +464,18 @@ button {
   width: min(100vw, var(--app-w));
   height: var(--keypad-h);
   transform: translateX(50%);
-  padding: 7px 8px max(7px, env(safe-area-inset-bottom));
+  padding: 8px 8px max(8px, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(19, 32, 27, 0.1);
   background: rgba(224, 233, 228, 0.96);
   box-shadow: 0 -14px 34px rgba(31, 48, 42, 0.12);
   backdrop-filter: blur(16px);
 }
 
-.active-cell {
-  height: 24px;
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 950;
-}
-
 .keypad-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  height: calc(100% - 25px);
+  height: 100%;
 }
 
 .key {
