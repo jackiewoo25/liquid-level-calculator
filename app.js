@@ -4,11 +4,11 @@ const MAX_UNDO = 20;
 
 const defaultRows = [
   { id: "n2o", tank: "N2O", factor: "36", current: "220", target: "350" },
-  { id: "t959", tank: "959", factor: "31", current: "0", target: "0" },
+  { id: "t959", tank: "959", factor: "31", current: "", target: "" },
   { id: "co2", tank: "CO2", factor: "33", current: "", target: "" },
-  { id: "t481", tank: "481", factor: "25", current: "", target: "0" },
-  { id: "t338", tank: "338", factor: "21", current: "", target: "0" },
-  { id: "high-n2", tank: "高氮", factor: "37.5", current: "", target: "0" }
+  { id: "t481", tank: "481", factor: "25", current: "", target: "" },
+  { id: "t338", tank: "338", factor: "21", current: "", target: "" },
+  { id: "high-n2", tank: "高氮", factor: "37.5", current: "", target: "" }
 ];
 
 const editableFields = ["factor", "current", "target"];
@@ -126,11 +126,22 @@ function numberValue(value) {
 }
 
 function rowCalc(row) {
+  const hasCurrent = row.current !== "";
+  const hasTarget = row.target !== "";
+  const hasFactor = row.factor !== "";
+  if (!hasCurrent || !hasTarget || !hasFactor) {
+    return {
+      cm: 0,
+      kg: 0,
+      hasResult: false
+    };
+  }
   const cm = numberValue(row.target) - numberValue(row.current);
   const kg = cm * numberValue(row.factor);
   return {
     cm: Number.isFinite(cm) ? cm : 0,
-    kg: Number.isFinite(kg) ? kg : 0
+    kg: Number.isFinite(kg) ? kg : 0,
+    hasResult: true
   };
 }
 
@@ -173,19 +184,16 @@ function renderSummary() {
   const remainingClass = remaining < 0 ? "over" : remaining === 0 && state.netWeight !== "" ? "done" : "";
   document.getElementById("summaryPanel").innerHTML = `
     <button class="summary-card editable-summary ${state.active.field === "netWeight" ? "active" : ""}" data-summary-field="netWeight" type="button">
-      <span>總淨重</span>
+      <span>總淨重 kg</span>
       <strong>${state.netWeight || "輸入"}</strong>
-      <small>kg</small>
     </button>
     <div class="summary-card">
-      <span>已充填</span>
+      <span>已充填 kg</span>
       <strong>${formatNumber(totalKg(), 0)}</strong>
-      <small>kg</small>
     </div>
     <div class="summary-card remaining ${remainingClass}">
-      <span>剩餘</span>
+      <span>剩餘 kg</span>
       <strong>${state.netWeight === "" ? "-" : formatNumber(remaining, 0)}</strong>
-      <small>kg</small>
     </div>
   `;
 }
@@ -202,18 +210,18 @@ function renderRow(row) {
       <div class="input-row">
         ${editableCell(row, "current")}
         ${editableCell(row, "target")}
-        ${metricCell("cm", calc.cm, 1)}
-        ${metricCell("kg", calc.kg, 0)}
+        ${metricCell("cm", calc.hasResult ? calc.cm : null, 1)}
+        ${metricCell("kg", calc.hasResult ? calc.kg : null, 0)}
       </div>
     </article>
   `;
 }
 
 function metricCell(label, value, digits) {
+  const activeResult = value !== null && value !== undefined;
   return `
-    <div class="metric-cell metric-${label}" aria-label="${label} ${formatNumber(value, digits)}">
-      <small>${label}</small>
-      <strong>${formatNumber(value, digits)}</strong>
+    <div class="metric-cell metric-${label} ${activeResult ? "has-value" : "empty"}" aria-label="${label} ${activeResult ? formatNumber(value, digits) : "空白"}">
+      <span>${activeResult ? formatNumber(value, digits) : label}</span>
     </div>
   `;
 }
@@ -223,10 +231,10 @@ function editableCell(row, field) {
   const value = row[field];
   const locked = field === "factor" && state.factorLocked;
   const placeholder = field === "factor" ? "-" : "&nbsp;";
+  const hasValue = value !== "";
   return `
-    <button class="editable field-${field} ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
-      <small>${compactFieldLabels[field]}</small>
-      <span>${value === "" ? placeholder : value}</span>
+    <button class="editable field-${field} ${locked ? "locked" : ""} ${hasValue ? "has-value" : "empty"} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
+      <span>${hasValue ? value : field === "factor" ? placeholder : compactFieldLabels[field]}</span>
     </button>
   `;
 }

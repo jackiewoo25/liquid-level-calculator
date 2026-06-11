@@ -131,7 +131,7 @@ button {
 
 .summary-card {
   display: grid;
-  min-height: 48px;
+  min-height: 56px;
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
@@ -143,22 +143,16 @@ button {
 
 .summary-card span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 950;
+  line-height: 1;
 }
 
 .summary-card strong {
-  margin-top: 2px;
+  margin-top: 5px;
   font-size: 22px;
   font-weight: 950;
   line-height: 0.98;
-}
-
-.summary-card small {
-  margin-top: 1px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 850;
 }
 
 .editable-summary {
@@ -243,7 +237,9 @@ button {
 
 .editable {
   display: grid;
+  grid-template-columns: 1fr;
   align-content: center;
+  justify-items: center;
   min-width: 0;
   min-height: 36px;
   border: 1px solid rgba(19, 32, 27, 0.1);
@@ -253,19 +249,21 @@ button {
   text-align: center;
 }
 
-.editable small {
-  color: rgba(102, 117, 110, 0.58);
-  font-size: 10px;
-  font-weight: 950;
-  line-height: 1;
-}
-
 .editable span {
-  margin-top: 3px;
   color: var(--ink);
   font-size: 17px;
   font-weight: 950;
   line-height: 1;
+}
+
+.editable.empty span {
+  color: rgba(102, 117, 110, 0.48);
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.editable.has-value span {
+  color: var(--ink);
 }
 
 .editable.active {
@@ -326,18 +324,21 @@ button {
   padding: 5px 4px;
 }
 
-.metric-cell small {
-  color: rgba(8, 98, 71, 0.58);
-  font-size: 10px;
+.metric-cell span {
+  color: var(--green);
+  font-size: 16px;
   font-weight: 950;
   line-height: 1;
 }
 
-.metric-cell strong {
-  margin-top: 3px;
+.metric-cell.empty span {
+  color: rgba(8, 98, 71, 0.58);
   font-size: 16px;
   font-weight: 950;
-  line-height: 1;
+}
+
+.metric-cell.has-value span {
+  color: var(--green);
 }
 
 .metric-kg {
@@ -345,7 +346,11 @@ button {
   color: var(--blue);
 }
 
-.metric-kg small {
+.metric-kg span {
+  color: var(--blue);
+}
+
+.metric-kg.empty span {
   color: rgba(23, 73, 120, 0.58);
 }
 
@@ -503,8 +508,8 @@ button {
     padding-left: 7px;
   }
 
-  .summary-card strong {
-    font-size: 22px;
+  .summary-card span {
+    font-size: 12px;
   }
 
   .tank-name {
@@ -512,8 +517,13 @@ button {
   }
 
   .editable span,
-  .metric-cell strong {
+  .metric-cell span {
     font-size: 18px;
+  }
+
+  .editable.empty span,
+  .metric-cell.empty span {
+    font-size: 16px;
   }
 
   .tank-card {
@@ -566,7 +576,7 @@ button {
   }
 
   .summary-card {
-    min-height: 48px;
+    min-height: 50px;
   }
 
   .summary-card strong {
