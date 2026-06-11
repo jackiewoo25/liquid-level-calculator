@@ -1,6 +1,7 @@
 :root {
   --app-w: 430px;
-  --keypad-h: 186px;
+  --keypad-h: 220px;
+  --content-h: calc(100dvh - var(--keypad-h));
   --bg: #f3f7f4;
   --ink: #13201b;
   --muted: #66756e;
@@ -58,10 +59,10 @@ button {
 
 .sheet-app {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto;
   width: min(100vw, var(--app-w));
-  height: calc(100dvh - var(--keypad-h));
-  min-height: 384px;
+  height: var(--content-h);
+  min-height: 360px;
   padding: max(6px, env(safe-area-inset-top)) 8px 5px;
 }
 
@@ -188,7 +189,7 @@ button {
 .table-wrap {
   order: 3;
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 1px 0 6px;
   scrollbar-width: none;
 }
@@ -204,7 +205,7 @@ button {
 
 .tank-card {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) 100px;
+  grid-template-columns: 58px minmax(0, 1fr) 82px;
   grid-template-areas: "head inputs results";
   align-items: stretch;
   gap: 6px;
@@ -308,7 +309,7 @@ button {
 .input-row {
   grid-area: inputs;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.9fr 1.16fr;
   gap: 5px;
 }
 
@@ -316,13 +317,12 @@ button {
   grid-area: results;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3px;
   margin-top: 0;
 }
 
 .result-chip {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-columns: 22px minmax(0, 1fr);
   min-height: 0;
   align-content: center;
   align-items: center;
@@ -340,12 +340,13 @@ button {
 
 .result-chip strong {
   margin-top: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 950;
   line-height: 1;
 }
 
 .result-chip.kg {
+  height: 100%;
   background: #eef5ff;
   color: var(--blue);
 }
@@ -354,28 +355,34 @@ button {
   color: rgba(23, 73, 120, 0.58);
 }
 
-.total-strip {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
+.field-target {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: 5px;
   align-items: center;
-  min-height: 33px;
-  border-radius: 13px;
-  background: #0f5f49;
-  color: #fff;
-  padding: 0 14px;
-  box-shadow: 0 12px 26px rgba(8, 98, 71, 0.18);
 }
 
-.total-strip span {
+.field-target small {
+  grid-column: 1;
+}
+
+.field-target span {
+  grid-column: 1;
+}
+
+.field-target em {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  min-width: 46px;
+  border-radius: 999px;
+  background: var(--green-2);
+  color: var(--green);
   font-size: 13px;
+  font-style: normal;
   font-weight: 950;
-  opacity: 0.82;
-}
-
-.total-strip strong {
-  font-size: 16px;
-  font-weight: 950;
+  line-height: 26px;
+  text-align: center;
 }
 
 .settings-panel {
@@ -527,10 +534,6 @@ button {
 }
 
 @media (max-width: 374px) {
-  :root {
-    --keypad-h: 168px;
-  }
-
   .sheet-app {
     padding-right: 7px;
     padding-left: 7px;
@@ -550,7 +553,7 @@ button {
   }
 
   .tank-card {
-    grid-template-columns: 52px minmax(0, 1fr) 92px;
+    grid-template-columns: 52px minmax(0, 1fr) 78px;
     gap: 5px;
     padding: 6px;
   }
@@ -562,7 +565,12 @@ button {
   }
 
   .result-chip strong {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .field-target em {
+    min-width: 40px;
+    font-size: 12px;
   }
 
   .small-action {
@@ -572,10 +580,6 @@ button {
 }
 
 @media (orientation: landscape) and (max-height: 520px) {
-  :root {
-    --keypad-h: 150px;
-  }
-
   body::before {
     position: fixed;
     top: 6px;
@@ -585,7 +589,7 @@ button {
     border-radius: 999px;
     background: rgba(19, 32, 27, 0.78);
     color: #fff;
-    content: "已固定直式版面";
+    content: "建議轉直式操作，畫面會更清楚";
     font-size: 12px;
     font-weight: 900;
     padding: 5px 10px;

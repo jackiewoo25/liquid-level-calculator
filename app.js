@@ -155,16 +155,12 @@ function render() {
   const grid = document.getElementById("calcGrid");
   grid.innerHTML = `
     ${state.rows.map(renderRow).join("")}
-    <div class="total-strip">
-      <span>合計</span>
-      <strong>${formatNumber(totalCm())} cm</strong>
-      <strong>${formatNumber(totalKg(), 0)} kg</strong>
-    </div>
   `;
   renderSummary();
   renderKeypad();
   renderActiveLabel();
   renderUndoState();
+  updateKeypadSize();
 }
 
 function renderUndoState() {
@@ -206,19 +202,27 @@ function renderRow(row) {
       </div>
       <div class="input-row">
         ${editableCell(row, "current")}
-        ${editableCell(row, "target")}
+        ${targetCell(row, calc)}
       </div>
       <div class="result-row">
-        <div class="result-chip cm">
-          <span>cm</span>
-          <strong>${formatNumber(calc.cm)}</strong>
-        </div>
         <div class="result-chip kg">
           <span>kg</span>
           <strong>${formatNumber(calc.kg, 0)}</strong>
         </div>
       </div>
     </article>
+  `;
+}
+
+function targetCell(row, calc) {
+  const active = state.active.rowId === row.id && state.active.field === "target";
+  const value = row.target;
+  return `
+    <button class="editable field-target ${active ? "active" : ""}" data-row-id="${row.id}" data-field="target" type="button" aria-label="${row.tank} ${fieldLabels.target}">
+      <small>後</small>
+      <span>${value === "" ? "&nbsp;" : value}</span>
+      <em>${formatNumber(calc.cm)} cm</em>
+    </button>
   `;
 }
 
@@ -270,6 +274,31 @@ function renderKey(key) {
     done: "完成"
   };
   return `<button class="key ${key.length > 1 ? "wide-key" : ""}" data-key="${key}" type="button">${labels[key] || key}</button>`;
+}
+
+function updateKeypadSize() {
+  requestAnimationFrame(() => {
+    const app = document.querySelector(".sheet-app");
+    const lastTank = document.querySelector(".tank-card:last-child");
+    if (!app) return;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const minKeypad = 202;
+    const maxKeypad = 320;
+    const naturalHeight = Math.ceil(app.scrollHeight);
+    const keypadHeight = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - naturalHeight));
+    const contentHeight = viewportHeight - keypadHeight;
+    document.documentElement.style.setProperty("--content-h", `${contentHeight}px`);
+    document.documentElement.style.setProperty("--keypad-h", `${keypadHeight}px`);
+    requestAnimationFrame(() => {
+      if (!lastTank) return;
+      const appTop = app.getBoundingClientRect().top;
+      const compactHeight = Math.ceil(lastTank.getBoundingClientRect().bottom - appTop + 5);
+      const finalKeypadHeight = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - compactHeight));
+      const finalContentHeight = viewportHeight - finalKeypadHeight;
+      document.documentElement.style.setProperty("--content-h", `${finalContentHeight}px`);
+      document.documentElement.style.setProperty("--keypad-h", `${finalKeypadHeight}px`);
+    });
+  });
 }
 
 function renderActiveLabel() {
@@ -420,5 +449,7 @@ document.getElementById("factorLockToggle").addEventListener("change", (event) =
   setFactorLock(event.target.checked);
 });
 document.getElementById("restoreFactors").addEventListener("click", restoreDefaultFactors);
+window.addEventListener("resize", updateKeypadSize);
+window.addEventListener("orientationchange", updateKeypadSize);
 
 render();
