@@ -61,7 +61,8 @@ button {
   display: grid;
   grid-template-rows: auto auto auto;
   width: min(100vw, var(--app-w));
-  height: calc(var(--viewport-h) - var(--keypad-h));
+  height: auto;
+  max-height: calc(var(--viewport-h) - 190px);
   min-height: 0;
   padding: max(6px, env(safe-area-inset-top)) 8px 5px;
 }
@@ -184,7 +185,7 @@ button {
   order: 3;
   min-height: 0;
   overflow-y: hidden;
-  padding: 1px 0 6px;
+  padding: 1px 0 0;
   scrollbar-width: none;
 }
 
@@ -561,7 +562,8 @@ button {
 
   .sheet-app {
     width: min(100vw, 430px);
-    height: calc(var(--viewport-h) - var(--keypad-h));
+    height: auto;
+    max-height: calc(var(--viewport-h) - 190px);
     padding-top: max(28px, env(safe-area-inset-top));
   }
 

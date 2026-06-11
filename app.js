@@ -170,6 +170,7 @@ function render() {
   renderSummary();
   renderKeypad();
   renderUndoState();
+  updateLayout();
 }
 
 function renderUndoState() {
@@ -415,6 +416,21 @@ function setViewportHeight() {
   if (height > 0) {
     document.documentElement.style.setProperty("--viewport-h", `${height}px`);
   }
+  return height;
+}
+
+function updateLayout() {
+  window.requestAnimationFrame(() => {
+    const viewportHeight = setViewportHeight();
+    const app = document.querySelector(".sheet-app");
+    if (!app || !viewportHeight) return;
+
+    const contentHeight = Math.ceil(app.getBoundingClientRect().height);
+    const minKeypad = 246;
+    const maxKeypad = Math.min(420, Math.floor(viewportHeight * 0.52));
+    const nextKeypad = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - contentHeight));
+    document.documentElement.style.setProperty("--keypad-h", `${nextKeypad}px`);
+  });
 }
 
 function resetViewport() {
@@ -424,11 +440,11 @@ function resetViewport() {
 }
 
 function settleAfterRotation() {
-  setViewportHeight();
+  updateLayout();
   resetViewport();
   [80, 260, 650].forEach((delay) => {
     window.setTimeout(() => {
-      setViewportHeight();
+      updateLayout();
       resetViewport();
     }, delay);
   });
@@ -445,7 +461,7 @@ function handleOrientationChange() {
   window.setTimeout(() => {
     const currentLandscape = isLandscape();
     lastLandscape = currentLandscape;
-    setViewportHeight();
+    updateLayout();
     resetViewport();
     if (previousLandscape && !currentLandscape) {
       window.setTimeout(() => window.location.reload(), 120);
@@ -453,7 +469,7 @@ function handleOrientationChange() {
   }, 240);
 }
 
-setViewportHeight();
+updateLayout();
 window.addEventListener("resize", settleAfterRotation);
 window.addEventListener("orientationchange", handleOrientationChange);
 window.visualViewport?.addEventListener("resize", settleAfterRotation);
