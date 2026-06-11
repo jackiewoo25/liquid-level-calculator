@@ -410,6 +410,13 @@ document.getElementById("factorLockToggle").addEventListener("change", (event) =
 });
 document.getElementById("restoreFactors").addEventListener("click", restoreDefaultFactors);
 
+function setViewportHeight() {
+  const height = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  if (height > 0) {
+    document.documentElement.style.setProperty("--viewport-h", `${height}px`);
+  }
+}
+
 function resetViewport() {
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
@@ -417,11 +424,37 @@ function resetViewport() {
 }
 
 function settleAfterRotation() {
+  setViewportHeight();
   resetViewport();
-  [80, 260, 650].forEach((delay) => window.setTimeout(resetViewport, delay));
+  [80, 260, 650].forEach((delay) => {
+    window.setTimeout(() => {
+      setViewportHeight();
+      resetViewport();
+    }, delay);
+  });
 }
 
-window.addEventListener("resize", settleAfterRotation);
-window.addEventListener("orientationchange", settleAfterRotation);
+function isLandscape() {
+  return window.matchMedia("(orientation: landscape)").matches;
+}
 
+let lastLandscape = isLandscape();
+
+function handleOrientationChange() {
+  const previousLandscape = lastLandscape;
+  window.setTimeout(() => {
+    const currentLandscape = isLandscape();
+    lastLandscape = currentLandscape;
+    setViewportHeight();
+    resetViewport();
+    if (previousLandscape && !currentLandscape) {
+      window.setTimeout(() => window.location.reload(), 120);
+    }
+  }, 240);
+}
+
+setViewportHeight();
+window.addEventListener("resize", settleAfterRotation);
+window.addEventListener("orientationchange", handleOrientationChange);
+window.visualViewport?.addEventListener("resize", settleAfterRotation);
 render();
