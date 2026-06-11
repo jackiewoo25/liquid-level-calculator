@@ -1,4 +1,4 @@
-const CACHE_NAME = "lienwha-liquid-level-calculator-v4";
+const CACHE_NAME = "lienwha-liquid-level-calculator-v5";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

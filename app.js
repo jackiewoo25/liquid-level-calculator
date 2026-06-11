@@ -12,6 +12,7 @@ const defaultRows = [
 ];
 
 const editableFields = ["factor", "current", "target"];
+const normalFields = ["current", "target"];
 const fieldLabels = {
   factor: "1cm=kg",
   current: "目前液位",
@@ -29,18 +30,29 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!saved || !Array.isArray(saved.rows)) throw new Error("empty");
+    const factorLocked = saved.factorLocked !== false;
     return {
       netWeight: cleanNumber(saved.netWeight),
+      factorLocked,
       rows: mergeRows(saved.rows),
-      active: saved.active || { rowId: "n2o", field: "current" }
+      active: normalizeActive(saved.active, factorLocked)
     };
   } catch {
     return {
       netWeight: "",
+      factorLocked: true,
       rows: clone(defaultRows),
       active: { rowId: "n2o", field: "current" }
     };
   }
+}
+
+function normalizeActive(active, factorLocked = true) {
+  if (!active || !active.field) return { rowId: "n2o", field: "current" };
+  if (active.field === "netWeight") return active;
+  if (active.field === "factor" && factorLocked) return { rowId: active.rowId || "n2o", field: "current" };
+  if (!editableFields.includes(active.field)) return { rowId: "n2o", field: "current" };
+  return active;
 }
 
 function mergeRows(savedRows) {
@@ -157,6 +169,7 @@ function render() {
 function renderUndoState() {
   const button = document.getElementById("undoAction");
   button.disabled = undoStack.length === 0;
+  document.getElementById("settingsAction").classList.toggle("unlocked", !state.factorLocked);
 }
 
 function renderSummary() {
@@ -196,9 +209,10 @@ function renderRow(row) {
 function editableCell(row, field) {
   const active = state.active.rowId === row.id && state.active.field === field;
   const value = row[field];
+  const locked = field === "factor" && state.factorLocked;
   return `
-    <button class="cell editable ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button">
-      ${value === "" ? "&nbsp;" : value}
+    <button class="cell editable ${locked ? "locked" : ""} ${active ? "active" : ""}" data-row-id="${row.id}" data-field="${field}" type="button" aria-label="${row.tank} ${fieldLabels[field]}${locked ? " 已鎖定" : ""}">
+      <span>${value === "" ? "&nbsp;" : value}</span>
     </button>
   `;
 }
@@ -252,6 +266,10 @@ function renderActiveLabel() {
 
 function setActive(rowId, field) {
   if (!editableFields.includes(field)) return;
+  if (field === "factor" && state.factorLocked) {
+    openSettings();
+    return;
+  }
   state.active = { rowId, field };
   saveState();
   render();
@@ -301,23 +319,54 @@ function applyKey(key) {
 }
 
 function moveNext() {
+  const fields = state.factorLocked ? normalFields : editableFields;
   const rowIndex = state.rows.findIndex((row) => row.id === state.active.rowId);
-  const fieldIndex = editableFields.indexOf(state.active.field);
-  if (fieldIndex < editableFields.length - 1) {
-    state.active.field = editableFields[fieldIndex + 1];
+  const fieldIndex = fields.indexOf(state.active.field);
+  if (fieldIndex < fields.length - 1) {
+    state.active.field = fields[fieldIndex + 1];
     return;
   }
   const nextRow = state.rows[(rowIndex + 1) % state.rows.length];
-  state.active = { rowId: nextRow.id, field: editableFields[0] };
+  state.active = { rowId: nextRow.id, field: fields[0] };
 }
 
 function resetAll() {
   pushUndo();
   state = {
     netWeight: "",
+    factorLocked: state.factorLocked,
     rows: clone(defaultRows).map((row) => ({ ...row, current: "", target: "" })),
     active: { rowId: "n2o", field: "current" }
   };
+  saveState();
+  render();
+}
+
+function openSettings() {
+  document.getElementById("factorLockToggle").checked = state.factorLocked;
+  document.getElementById("settingsPanel").hidden = false;
+}
+
+function closeSettings() {
+  document.getElementById("settingsPanel").hidden = true;
+}
+
+function setFactorLock(locked) {
+  pushUndo();
+  state.factorLocked = locked;
+  if (locked && state.active.field === "factor") {
+    state.active.field = "current";
+  }
+  saveState();
+  render();
+}
+
+function restoreDefaultFactors() {
+  pushUndo();
+  state.rows = state.rows.map((row) => {
+    const defaultRow = defaultRows.find((item) => item.id === row.id);
+    return defaultRow ? { ...row, factor: defaultRow.factor } : row;
+  });
   saveState();
   render();
 }
@@ -344,5 +393,14 @@ document.getElementById("keypadGrid").addEventListener("click", (event) => {
 
 document.getElementById("resetAll").addEventListener("click", resetAll);
 document.getElementById("undoAction").addEventListener("click", restorePrevious);
+document.getElementById("settingsAction").addEventListener("click", openSettings);
+document.getElementById("closeSettings").addEventListener("click", closeSettings);
+document.getElementById("settingsPanel").addEventListener("click", (event) => {
+  if (event.target.id === "settingsPanel") closeSettings();
+});
+document.getElementById("factorLockToggle").addEventListener("change", (event) => {
+  setFactorLock(event.target.checked);
+});
+document.getElementById("restoreFactors").addEventListener("click", restoreDefaultFactors);
 
 render();

@@ -2,7 +2,10 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <meta name="theme-color" content="#f4f7f4" />
     <title>液位換算表</title>
     <link rel="manifest" href="manifest.webmanifest" />
@@ -17,6 +20,7 @@
         </div>
         <div class="top-actions">
           <button class="small-action" id="undoAction" type="button">復原</button>
+          <button class="small-action" id="settingsAction" type="button">設定</button>
           <button class="small-action danger" id="resetAll" type="button">清空</button>
         </div>
       </header>
@@ -27,6 +31,26 @@
 
       <section class="summary-panel" id="summaryPanel" aria-label="總淨重與剩餘"></section>
     </main>
+
+    <section class="settings-panel" id="settingsPanel" aria-label="設定" hidden>
+      <div class="settings-card">
+        <div class="settings-head">
+          <div>
+            <p>設定</p>
+            <h2>換算係數</h2>
+          </div>
+          <button class="icon-action" id="closeSettings" type="button" aria-label="關閉設定">×</button>
+        </div>
+        <label class="toggle-row">
+          <span>
+            <strong>鎖定 1cm=kg</strong>
+            <small>鎖定時新人只能輸入液位，避免誤改係數。</small>
+          </span>
+          <input id="factorLockToggle" type="checkbox" />
+        </label>
+        <button class="restore-factor" id="restoreFactors" type="button">還原預設係數 36 / 31 / 33 / 25 / 21 / 37.5</button>
+      </div>
+    </section>
 
     <section class="keypad" aria-label="數字鍵盤">
       <div class="active-cell" id="activeCellLabel">點選表格儲存格</div>

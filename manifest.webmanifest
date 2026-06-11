@@ -3,6 +3,7 @@
   "short_name": "液位換算",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#f4f7f4",
   "theme_color": "#0a5138",
   "icons": [
