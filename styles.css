@@ -1,7 +1,6 @@
 :root {
   --app-w: 430px;
-  --keypad-h: 220px;
-  --content-h: calc(100dvh - var(--keypad-h));
+  --keypad-h: 232px;
   --bg: #f3f7f4;
   --ink: #13201b;
   --muted: #66756e;
@@ -61,8 +60,8 @@ button {
   display: grid;
   grid-template-rows: auto auto auto;
   width: min(100vw, var(--app-w));
-  height: var(--content-h);
-  min-height: 360px;
+  height: calc(100dvh - var(--keypad-h));
+  min-height: 0;
   padding: max(6px, env(safe-area-inset-top)) 8px 5px;
 }
 
@@ -205,10 +204,10 @@ button {
 
 .tank-card {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) 82px;
-  grid-template-areas: "head inputs results";
+  grid-template-columns: 58px minmax(0, 1fr);
+  grid-template-areas: "head inputs";
   align-items: stretch;
-  gap: 6px;
+  gap: 5px;
   min-height: 50px;
   border: 1px solid rgba(19, 32, 27, 0.07);
   border-radius: 13px;
@@ -309,80 +308,45 @@ button {
 .input-row {
   grid-area: inputs;
   display: grid;
-  grid-template-columns: 0.9fr 1.16fr;
-  gap: 5px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
 }
 
-.result-row {
-  grid-area: results;
+.metric-cell {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: 0;
-}
-
-.result-chip {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  min-height: 0;
+  min-width: 0;
+  min-height: 36px;
   align-content: center;
-  align-items: center;
-  border-radius: 9px;
-  background: var(--green-2);
+  justify-items: center;
+  border: 1px solid rgba(19, 32, 27, 0.1);
+  border-radius: 10px;
+  background: #eef7f2;
   color: var(--green);
-  padding: 3px 6px;
+  padding: 5px 4px;
 }
 
-.result-chip span {
+.metric-cell small {
   color: rgba(8, 98, 71, 0.58);
   font-size: 10px;
   font-weight: 950;
+  line-height: 1;
 }
 
-.result-chip strong {
-  margin-top: 0;
+.metric-cell strong {
+  margin-top: 3px;
   font-size: 16px;
   font-weight: 950;
   line-height: 1;
 }
 
-.result-chip.kg {
-  height: 100%;
+.metric-kg {
   background: #eef5ff;
   color: var(--blue);
 }
 
-.result-chip.kg span {
+.metric-kg small {
   color: rgba(23, 73, 120, 0.58);
-}
-
-.field-target {
-  position: relative;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto auto;
-  column-gap: 5px;
-  align-items: center;
-}
-
-.field-target small {
-  grid-column: 1;
-}
-
-.field-target span {
-  grid-column: 1;
-}
-
-.field-target em {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  min-width: 46px;
-  border-radius: 999px;
-  background: var(--green-2);
-  color: var(--green);
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 950;
-  line-height: 26px;
-  text-align: center;
 }
 
 .settings-panel {
@@ -548,13 +512,13 @@ button {
   }
 
   .editable span,
-  .result-chip strong {
+  .metric-cell strong {
     font-size: 18px;
   }
 
   .tank-card {
-    grid-template-columns: 52px minmax(0, 1fr) 78px;
-    gap: 5px;
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 4px;
     padding: 6px;
   }
 
@@ -564,13 +528,8 @@ button {
     padding-left: 4px;
   }
 
-  .result-chip strong {
-    font-size: 14px;
-  }
-
-  .field-target em {
-    min-width: 40px;
-    font-size: 12px;
+  .input-row {
+    gap: 3px;
   }
 
   .small-action {
@@ -599,7 +558,7 @@ button {
   .sheet-app {
     width: min(100vw, 430px);
     height: calc(100dvh - var(--keypad-h));
-    padding-top: 28px;
+    padding-top: max(28px, env(safe-area-inset-top));
   }
 
   .keypad {

@@ -160,7 +160,6 @@ function render() {
   renderKeypad();
   renderActiveLabel();
   renderUndoState();
-  updateKeypadSize();
 }
 
 function renderUndoState() {
@@ -202,27 +201,20 @@ function renderRow(row) {
       </div>
       <div class="input-row">
         ${editableCell(row, "current")}
-        ${targetCell(row, calc)}
-      </div>
-      <div class="result-row">
-        <div class="result-chip kg">
-          <span>kg</span>
-          <strong>${formatNumber(calc.kg, 0)}</strong>
-        </div>
+        ${editableCell(row, "target")}
+        ${metricCell("cm", calc.cm, 1)}
+        ${metricCell("kg", calc.kg, 0)}
       </div>
     </article>
   `;
 }
 
-function targetCell(row, calc) {
-  const active = state.active.rowId === row.id && state.active.field === "target";
-  const value = row.target;
+function metricCell(label, value, digits) {
   return `
-    <button class="editable field-target ${active ? "active" : ""}" data-row-id="${row.id}" data-field="target" type="button" aria-label="${row.tank} ${fieldLabels.target}">
-      <small>後</small>
-      <span>${value === "" ? "&nbsp;" : value}</span>
-      <em>${formatNumber(calc.cm)} cm</em>
-    </button>
+    <div class="metric-cell metric-${label}" aria-label="${label} ${formatNumber(value, digits)}">
+      <small>${label}</small>
+      <strong>${formatNumber(value, digits)}</strong>
+    </div>
   `;
 }
 
@@ -237,10 +229,6 @@ function editableCell(row, field) {
       <span>${value === "" ? placeholder : value}</span>
     </button>
   `;
-}
-
-function totalCm() {
-  return state.rows.reduce((sum, row) => sum + rowCalc(row).cm, 0);
 }
 
 function renderKeypad() {
@@ -274,31 +262,6 @@ function renderKey(key) {
     done: "完成"
   };
   return `<button class="key ${key.length > 1 ? "wide-key" : ""}" data-key="${key}" type="button">${labels[key] || key}</button>`;
-}
-
-function updateKeypadSize() {
-  requestAnimationFrame(() => {
-    const app = document.querySelector(".sheet-app");
-    const lastTank = document.querySelector(".tank-card:last-child");
-    if (!app) return;
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const minKeypad = 202;
-    const maxKeypad = 320;
-    const naturalHeight = Math.ceil(app.scrollHeight);
-    const keypadHeight = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - naturalHeight));
-    const contentHeight = viewportHeight - keypadHeight;
-    document.documentElement.style.setProperty("--content-h", `${contentHeight}px`);
-    document.documentElement.style.setProperty("--keypad-h", `${keypadHeight}px`);
-    requestAnimationFrame(() => {
-      if (!lastTank) return;
-      const appTop = app.getBoundingClientRect().top;
-      const compactHeight = Math.ceil(lastTank.getBoundingClientRect().bottom - appTop + 5);
-      const finalKeypadHeight = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - compactHeight));
-      const finalContentHeight = viewportHeight - finalKeypadHeight;
-      document.documentElement.style.setProperty("--content-h", `${finalContentHeight}px`);
-      document.documentElement.style.setProperty("--keypad-h", `${finalKeypadHeight}px`);
-    });
-  });
 }
 
 function renderActiveLabel() {
@@ -449,7 +412,19 @@ document.getElementById("factorLockToggle").addEventListener("change", (event) =
   setFactorLock(event.target.checked);
 });
 document.getElementById("restoreFactors").addEventListener("click", restoreDefaultFactors);
-window.addEventListener("resize", updateKeypadSize);
-window.addEventListener("orientationchange", updateKeypadSize);
+
+function resetViewport() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+function settleAfterRotation() {
+  resetViewport();
+  [80, 260, 650].forEach((delay) => window.setTimeout(resetViewport, delay));
+}
+
+window.addEventListener("resize", settleAfterRotation);
+window.addEventListener("orientationchange", settleAfterRotation);
 
 render();
