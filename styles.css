@@ -576,25 +576,32 @@ button {
 @media (orientation: landscape) and (max-height: 520px) {
   body::before {
     position: fixed;
-    top: 6px;
+    top: 8px;
     left: 50%;
     z-index: 30;
     transform: translateX(-50%);
-    border-radius: 999px;
-    background: rgba(19, 32, 27, 0.78);
-    color: #fff;
+    width: max-content;
+    max-width: calc(100vw - 22px);
+    border: 1px solid rgba(8, 98, 71, 0.18);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 24px rgba(31, 48, 42, 0.16);
+    color: var(--green);
     content: "建議轉直式操作，畫面會更清楚";
-    font-size: 12px;
-    font-weight: 900;
-    padding: 5px 10px;
+    font-size: 17px;
+    font-weight: 950;
+    line-height: 1.1;
+    padding: 8px 14px;
     pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
   }
 
   .sheet-app {
     width: min(100vw, 430px);
     height: calc(var(--viewport-h) - var(--keypad-h));
     max-height: none;
-    padding-top: max(24px, env(safe-area-inset-top));
+    padding-top: max(42px, env(safe-area-inset-top));
   }
 
   .keypad {
