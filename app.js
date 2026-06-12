@@ -433,13 +433,20 @@ function updateLayout() {
   window.requestAnimationFrame(() => {
     const viewportHeight = setViewportHeight();
     const app = document.querySelector(".sheet-app");
+    const topbar = document.querySelector(".sheet-topbar");
+    const summary = document.querySelector(".summary-panel");
     if (!app || !viewportHeight) return;
 
-    const contentHeight = Math.ceil(app.getBoundingClientRect().height);
-    const minKeypad = 246;
-    const maxKeypad = Math.min(420, Math.floor(viewportHeight * 0.52));
-    const nextKeypad = Math.max(minKeypad, Math.min(maxKeypad, viewportHeight - contentHeight));
-    document.documentElement.style.setProperty("--keypad-h", `${nextKeypad}px`);
+    const keypadHeight = Math.max(246, Math.min(300, Math.floor(viewportHeight * 0.36)));
+    const topbarHeight = Math.ceil(topbar?.getBoundingClientRect().height || 0);
+    const summaryHeight = Math.ceil(summary?.getBoundingClientRect().height || 0);
+    const shellPadding = 12;
+    const gridGapTotal = 15;
+    const availableForRows = viewportHeight - keypadHeight - topbarHeight - summaryHeight - shellPadding - gridGapTotal;
+    const nextRowHeight = Math.max(51, Math.floor(availableForRows / state.rows.length));
+
+    document.documentElement.style.setProperty("--keypad-h", `${keypadHeight}px`);
+    document.documentElement.style.setProperty("--tank-row-h", `${nextRowHeight}px`);
   });
 }
 

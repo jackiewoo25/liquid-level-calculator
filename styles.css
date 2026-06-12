@@ -1,6 +1,7 @@
 :root {
   --app-w: 430px;
   --keypad-h: 246px;
+  --tank-row-h: 51px;
   --viewport-h: 100svh;
   --bg: #f3f7f4;
   --ink: #13201b;
@@ -134,26 +135,26 @@ button {
   grid-template-columns: 1.05fr 1fr 1fr;
   gap: 3px;
   align-items: start;
-  height: 35px;
-  max-height: 35px;
+  height: 43px;
+  max-height: 43px;
   overflow: hidden;
   padding: 0 0 1px;
 }
 
 .summary-card {
   display: grid;
-  height: 32px;
+  height: 40px;
   min-height: 0;
-  max-height: 32px;
+  max-height: 40px;
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 3px 8px rgba(31, 48, 42, 0.05);
+  box-shadow: 0 5px 12px rgba(31, 48, 42, 0.06);
   color: var(--ink);
   overflow: hidden;
-  padding: 0 4px;
+  padding: 2px 4px;
 }
 
 .summary-card span {
@@ -165,8 +166,8 @@ button {
 }
 
 .summary-card strong {
-  margin-top: -1px;
-  font-size: 25px;
+  margin-top: 1px;
+  font-size: 24px;
   font-weight: 950;
   line-height: 0.86;
 }
@@ -218,7 +219,7 @@ button {
   grid-template-areas: "head inputs";
   align-items: stretch;
   gap: 4px;
-  min-height: 51px;
+  min-height: var(--tank-row-h);
   border: 1px solid rgba(19, 32, 27, 0.07);
   border-radius: 11px;
   background:
@@ -257,7 +258,7 @@ button {
   align-content: center;
   justify-items: center;
   min-width: 0;
-  min-height: 40px;
+  min-height: calc(var(--tank-row-h) - 11px);
   border: 1px solid rgba(19, 32, 27, 0.1);
   border-radius: 9px;
   background: var(--surface);
@@ -330,7 +331,7 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   min-width: 0;
-  min-height: 40px;
+  min-height: calc(var(--tank-row-h) - 11px);
   align-content: center;
   justify-items: center;
   border: 1px solid rgba(19, 32, 27, 0.1);
@@ -557,7 +558,6 @@ button {
   }
 
   .editable {
-    min-height: 40px;
     padding-right: 4px;
     padding-left: 4px;
   }
@@ -601,8 +601,8 @@ button {
   }
 
   .summary-card {
-    height: 31px;
-    max-height: 31px;
+    height: 38px;
+    max-height: 38px;
     min-height: 0;
   }
 
@@ -611,6 +611,6 @@ button {
   }
 
   .tank-card {
-    min-height: 50px;
+    min-height: var(--tank-row-h);
   }
 }
