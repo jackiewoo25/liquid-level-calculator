@@ -64,7 +64,7 @@ button {
   height: auto;
   max-height: calc(var(--viewport-h) - 190px);
   min-height: 0;
-  padding: max(2px, env(safe-area-inset-top)) 8px 2px;
+  padding: max(1px, env(safe-area-inset-top)) 8px 1px;
 }
 
 .sheet-topbar {
@@ -72,7 +72,7 @@ button {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  min-height: 24px;
+  min-height: 21px;
 }
 
 .sheet-topbar h1 {
@@ -80,9 +80,9 @@ button {
 }
 
 .sheet-topbar h1 {
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 950;
-  line-height: 1;
+  line-height: 0.92;
 }
 
 .top-actions {
@@ -133,35 +133,35 @@ button {
   display: grid;
   grid-template-columns: 1.05fr 1fr 1fr;
   gap: 3px;
-  padding: 0 0 2px;
+  padding: 0 0 1px;
 }
 
 .summary-card {
   display: grid;
-  min-height: 38px;
-  align-content: center;
+  min-height: 32px;
+  align-content: start;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 24px rgba(31, 48, 42, 0.08);
   color: var(--ink);
-  padding: 2px 4px;
+  padding: 1px 4px 2px;
 }
 
 .summary-card span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 950;
-  line-height: 1;
+  line-height: 0.95;
   white-space: nowrap;
 }
 
 .summary-card strong {
-  margin-top: 2px;
-  font-size: 22px;
+  margin-top: 0;
+  font-size: 25px;
   font-weight: 950;
-  line-height: 0.98;
+  line-height: 0.9;
 }
 
 .editable-summary {
@@ -522,11 +522,11 @@ button {
   }
 
   .summary-card span {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .summary-card strong {
-    font-size: 21px;
+    font-size: 23px;
   }
 
   .tank-name {
@@ -594,11 +594,11 @@ button {
   }
 
   .summary-card {
-    min-height: 28px;
+    min-height: 30px;
   }
 
   .summary-card strong {
-    font-size: 21px;
+    font-size: 23px;
   }
 
   .tank-card {
