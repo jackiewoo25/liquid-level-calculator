@@ -437,13 +437,13 @@ function updateLayout() {
     const summary = document.querySelector(".summary-panel");
     if (!app || !viewportHeight) return;
 
-    const keypadHeight = Math.max(246, Math.min(300, Math.floor(viewportHeight * 0.36)));
+    const keypadHeight = Math.max(238, Math.min(292, Math.floor(viewportHeight * 0.34)));
     const topbarHeight = Math.ceil(topbar?.getBoundingClientRect().height || 0);
     const summaryHeight = Math.ceil(summary?.getBoundingClientRect().height || 0);
-    const shellPadding = 12;
-    const gridGapTotal = 15;
+    const shellPadding = 8;
+    const gridGapTotal = 18;
     const availableForRows = viewportHeight - keypadHeight - topbarHeight - summaryHeight - shellPadding - gridGapTotal;
-    const nextRowHeight = Math.max(51, Math.floor(availableForRows / state.rows.length));
+    const nextRowHeight = Math.max(52, Math.floor(availableForRows / state.rows.length));
 
     document.documentElement.style.setProperty("--keypad-h", `${keypadHeight}px`);
     document.documentElement.style.setProperty("--tank-row-h", `${nextRowHeight}px`);
