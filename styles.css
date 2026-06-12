@@ -137,17 +137,16 @@ button {
 }
 
 .summary-card {
-  display: flex;
-  min-height: 30px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
+  display: grid;
+  min-height: 38px;
+  align-content: center;
+  justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 24px rgba(31, 48, 42, 0.08);
   color: var(--ink);
-  padding: 2px 7px;
+  padding: 2px 4px;
 }
 
 .summary-card span {
@@ -159,8 +158,8 @@ button {
 }
 
 .summary-card strong {
-  margin-top: 0;
-  font-size: 23px;
+  margin-top: 2px;
+  font-size: 22px;
   font-weight: 950;
   line-height: 0.98;
 }
