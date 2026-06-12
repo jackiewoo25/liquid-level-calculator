@@ -64,7 +64,7 @@ button {
   height: auto;
   max-height: calc(var(--viewport-h) - 190px);
   min-height: 0;
-  padding: max(3px, env(safe-area-inset-top)) 8px 3px;
+  padding: max(2px, env(safe-area-inset-top)) 8px 2px;
 }
 
 .sheet-topbar {
@@ -72,7 +72,7 @@ button {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
-  min-height: 28px;
+  min-height: 24px;
 }
 
 .sheet-topbar h1 {
@@ -80,7 +80,7 @@ button {
 }
 
 .sheet-topbar h1 {
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 950;
   line-height: 1;
 }
@@ -93,9 +93,9 @@ button {
 .small-action {
   display: grid;
   place-items: center;
-  width: 31px;
-  min-width: 31px;
-  height: 28px;
+  width: 29px;
+  min-width: 29px;
+  height: 25px;
   border: 1px solid rgba(8, 98, 71, 0.18);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.88);
@@ -105,8 +105,8 @@ button {
 }
 
 .small-action svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -132,20 +132,22 @@ button {
   order: 2;
   display: grid;
   grid-template-columns: 1.05fr 1fr 1fr;
-  gap: 4px;
-  padding: 0 0 3px;
+  gap: 3px;
+  padding: 0 0 2px;
 }
 
 .summary-card {
-  display: grid;
-  min-height: 34px;
-  align-content: center;
-  justify-items: center;
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
   border: 1px solid rgba(8, 98, 71, 0.16);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 24px rgba(31, 48, 42, 0.08);
   color: var(--ink);
+  padding: 2px 7px;
 }
 
 .summary-card span {
@@ -153,11 +155,12 @@ button {
   font-size: 9px;
   font-weight: 950;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .summary-card strong {
-  margin-top: 2px;
-  font-size: 17px;
+  margin-top: 0;
+  font-size: 23px;
   font-weight: 950;
   line-height: 0.98;
 }
@@ -523,6 +526,10 @@ button {
     font-size: 9px;
   }
 
+  .summary-card strong {
+    font-size: 21px;
+  }
+
   .tank-name {
     font-size: 17px;
   }
@@ -554,8 +561,8 @@ button {
   }
 
   .small-action {
-    width: 30px;
-    min-width: 30px;
+    width: 28px;
+    min-width: 28px;
   }
 }
 
@@ -588,11 +595,11 @@ button {
   }
 
   .summary-card {
-    min-height: 32px;
+    min-height: 28px;
   }
 
   .summary-card strong {
-    font-size: 16px;
+    font-size: 21px;
   }
 
   .tank-card {
