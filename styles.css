@@ -133,20 +133,27 @@ button {
   display: grid;
   grid-template-columns: 1.05fr 1fr 1fr;
   gap: 3px;
+  align-items: start;
+  height: 35px;
+  max-height: 35px;
+  overflow: hidden;
   padding: 0 0 1px;
 }
 
 .summary-card {
   display: grid;
-  min-height: 32px;
-  align-content: start;
+  height: 32px;
+  min-height: 0;
+  max-height: 32px;
+  align-content: center;
   justify-items: center;
   border: 1px solid rgba(8, 98, 71, 0.16);
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 24px rgba(31, 48, 42, 0.08);
+  box-shadow: 0 3px 8px rgba(31, 48, 42, 0.05);
   color: var(--ink);
-  padding: 1px 4px 2px;
+  overflow: hidden;
+  padding: 0 4px;
 }
 
 .summary-card span {
@@ -158,10 +165,10 @@ button {
 }
 
 .summary-card strong {
-  margin-top: 0;
+  margin-top: -1px;
   font-size: 25px;
   font-weight: 950;
-  line-height: 0.9;
+  line-height: 0.86;
 }
 
 .editable-summary {
@@ -594,11 +601,13 @@ button {
   }
 
   .summary-card {
-    min-height: 30px;
+    height: 31px;
+    max-height: 31px;
+    min-height: 0;
   }
 
   .summary-card strong {
-    font-size: 23px;
+    font-size: 24px;
   }
 
   .tank-card {
